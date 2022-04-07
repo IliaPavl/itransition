@@ -223,6 +223,7 @@ const readline = require('readline');
 const randomNumber = require("random-number-csprng");
 
 async function startGame(list){
+    console.log('\x1Bc');
     //list = ['камень','ножницы','бумага','спок','черепаха','спок1','черепаха1','спок2','черепаха2'];
     let check = new Check();
 
@@ -236,23 +237,24 @@ async function startGame(list){
     help.generateHelp();
     let table = new Table(list);
     let randomize= new Randomize();
+    console.log('\x1Bc');
+
+    await randomize.generate(numberTurn);
+    hmac.setRandomNumber(randomize.getRandomNumber());      
+    hmac.generateHMAC(randomize.getRandomNumber()); 
+    
+    console.info("SHA256/sha2:"+hmac.getHMAC());
+    table.showTable();
+
 
     while(true){
-
-        await randomize.generate(numberTurn);
-        hmac.setRandomNumber(randomize.getRandomNumber());      
-        hmac.generateHMAC(randomize.getRandomNumber()); 
-
-        console.info("SHA256/sha2:"+hmac.getHMAC());
-        table.showTable();
-
-        let playerTurn = await ask('Enter your move: ');
         
+        let playerTurn = await ask('Enter your move: ');
+        console.log('\x1Bc');
 
         if(check.checkMenu(playerTurn,numberTurn)){
             if(playerTurn=="?"){
                 help.showHelp();
-                continue;
             }else if (playerTurn=="0"){
                 break;
             }else{
@@ -278,8 +280,15 @@ async function startGame(list){
                     break;} 
                 }
                 if(winner==0)console.info("You lose");
+                
             }
-        }else continue;   
+        }
+        await randomize.generate(numberTurn);
+        hmac.setRandomNumber(randomize.getRandomNumber());      
+        hmac.generateHMAC(randomize.getRandomNumber()); 
+        
+        console.info("SHA256/sha2:"+hmac.getHMAC());
+        table.showTable(); 
     }                  
 }
 
