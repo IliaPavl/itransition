@@ -191,7 +191,6 @@ class Randomize{
 
     async generate(numberMoves){
         let number=[];
-        //так и не получилось закинуть await randomNumber(0, list.length-1); в метод generateKey 
         number.push(await randomNumber(0, numberMoves-1));
         this.randomNumber=number[0];
     }
